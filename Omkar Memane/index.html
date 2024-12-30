@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Web Page with Splash Screen</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Splash Screen Styling */
+        #splashScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        /* Hide the Main Website Initially */
+        #mainWebsite {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <div class="text-center">
+            <h1>Welcome to My Website</h1>
+            <button id="fetchDataBtn" class="btn btn-primary mt-3">Fetch Data</button>
+            <div id="fetchDataContainer" class="mt-3"></div>
+        </div>
+    </div>
+
+    <!-- Main Website -->
+    <div id="mainWebsite">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Header Section -->
+        <header class="jumbotron text-center">
+            <h1 class="display-4">Welcome to My Static Web Page</h1>
+            <p class="lead">This is a simple, static web page using HTML, CSS, and Bootstrap.</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Main Content</h2>
+                    <p>This is the main content area.</p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Sidebar</h2>
+                    <p>This is the sidebar content area.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-4">
+            <p>&copy; 2024 Omkar R Memane</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript to Handle Splash Screen and Data Fetch
+        document.getElementById('fetchDataBtn').addEventListener('click', function () {
+            fetchData();
+        });
+
+        function fetchData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts/1', true);
+
+            xhr.onload = function () {
+                if (this.status === 200) {
+                    const post = JSON.parse(this.responseText);
+                    document.getElementById('fetchDataContainer').innerHTML = `
+                        <div class="alert alert-success">
+                            <strong>Data Fetched:</strong> ${post.title}
+                        </div>
+                    `;
+
+                    // Hide Splash Screen and Show Main Website after 2 seconds
+                    setTimeout(function () {
+                        document.getElementById('splashScreen').style.display = 'none';
+                        document.getElementById('mainWebsite').style.display = 'block';
+                    }, 2000);
+                } else {
+                    document.getElementById('fetchDataContainer').innerHTML = `
+                        <div class="alert alert-danger">Error fetching data. Please try again.</div>
+                    `;
+                }
+            };
+
+            xhr.onerror = function () {
+                document.getElementById('fetchDataContainer').innerHTML = `
+                    <div class="alert alert-danger">Network Error. Please check your connection.</div>
+                `;
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
